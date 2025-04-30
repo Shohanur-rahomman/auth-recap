@@ -1,11 +1,11 @@
-import React, { use } from 'react';
+import React, { use, useRef } from 'react';
 import { Link } from 'react-router';
 import { AuthContext } from './Provider/AuthContext';
 
 
 const SingIn = () => {
-
-    const { logIn, googleProvider } = use(AuthContext);
+    const emailRef = useRef()
+    const { logIn, googleProvider,passReset } = use(AuthContext);
     
 
     const handleSubmit = (e) => {
@@ -26,6 +26,17 @@ const SingIn = () => {
             console.log(result.user);
         })
     }
+    const handleReset = () => {
+        const email = emailRef.current.value;
+        passReset(email).then(() => {
+            alert('check inbox')
+        })
+            .catch(error => {
+            console.log(error);
+        })
+    }
+
+    
 
     return (
         <div className="flex flex-col max-w-md mx-auto p-6 border rounded-md sm:p-6  ">
@@ -44,7 +55,7 @@ const SingIn = () => {
                     <h2 className='text-2xl font-bold text-center'>or</h2>
                     <div>
                         <label htmlFor="email" className="block mb-2 text-sm">Email address</label>
-                        <input type="email" name="email" id="email" placeholder="leroy@jenkins.com" className="w-full px-3 py-2 border rounded-md  " />
+                        <input type="email" ref={emailRef} name="email" id="email" placeholder="leroy@jenkins.com" className="w-full px-3 py-2 border rounded-md  " />
                     </div>
                     <div>
                         <label htmlFor="password" className="block mb-2 text-sm">Password</label>
@@ -53,6 +64,9 @@ const SingIn = () => {
 
                 </div>
                 <div className="space-y-1">
+                    <div className='flex justify-center items-center'>
+                        <button onClick={handleReset} className='cursor-pointer '>forget password?</button>
+                    </div>
                     <div>
                         <button type="submit" className="cursor-pointer w-full px-8 py-3 font-semibold rounded-md">Sign in</button>
                     </div>

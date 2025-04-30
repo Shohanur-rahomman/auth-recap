@@ -5,7 +5,7 @@ import { AuthContext } from './Provider/AuthContext';
 
 const SingUp = () => {
 
-    const { createUser, emailVerification } = use(AuthContext);
+    const { createUser, emailVerification} = use(AuthContext);
     
     const handleSubmit = e => {
         e.preventDefault();
@@ -16,19 +16,35 @@ const SingUp = () => {
         
         console.log(name, email, password, confirmPassword);
 
+        if (password.length < 8 && confirmPassword.length < 8) {
+            alert('must be 8 characters')
+            return;
+        }
+        if (!/(?=.*[a-z])/.test(password) && !/(?=.*[a-z])/.test(confirmPassword)) {
+            alert('At least one lowercase letter');
+            return;
+        }
+        if (!/(?=.*[A-Z])/.test(password) && !/(?=.*[A-Z])/.test(confirmPassword)) {
+            alert('At least one uppercase letter');
+            return;
+        }
+        if (!/(?=.*\d)/.test(password) && !/(?=.*\d)/.test(confirmPassword)) {
+            alert('At least one digit');
+            return;
+        }
         createUser(email, password).then(result => {
             console.log(result.user);
+           
             emailVerification().then(() => {
                 alert('check inbox')
             })
         })
             .catch(error => {
             console.log(error);
-        })
-
-       
-        
+        }) 
     }
+
+    
 
     return (
         <div className="flex flex-col max-w-md mx-auto p-6 border rounded-md sm:p-6  ">
@@ -48,11 +64,11 @@ const SingUp = () => {
                     </div>
                     <div>
                         <label htmlFor="password" className="block mb-2 text-sm">Password</label>
-                        <input type="password" name="password" id="password" placeholder="*****" className="w-full px-3 py-2 border rounded-md  " />
+                        <input type="text" name="password" id="password" placeholder="*****" className="w-full px-3 py-2 border rounded-md  " />
                     </div>
                     <div>
                         <label htmlFor="confirmPassword" className="block mb-2 text-sm">Confirm Password</label>
-                        <input type="password" name="confirmPassword" id="ConfirmPassword" placeholder="*****" className="w-full px-3 py-2 border rounded-md " />
+                        <input type="text" name="confirmPassword" id="ConfirmPassword" placeholder="*****" className="w-full px-3 py-2 border rounded-md " />
                     </div>
                 </div>
                 <div className="space-y-1">
